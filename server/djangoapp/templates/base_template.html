@@ -35,11 +35,15 @@
               <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact us</a>
             </li>
           </ul>
-          <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Username">
-            <input class="form-control mr-sm-2" type="password" placeholder="Password">
-            <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Login</button>
-          </form>
+              <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+                  {% csrf_token %}
+                  <div class="input-group">
+                      <input type="text" class="form-control mr-1" placeholder="Username" name="username" required>
+                      <input type="password" class="form-control mr-1" placeholder="Password" name="psw" required>
+                      <button class="btn btn-primary mr-1" type="submit">Login</button>
+                      <a class="btn btn-outline-dark" href="{% url 'djangoapp:registration' %}">Sign Up</a>
+                  </div>
+              </form>
         </div>
       </div>
       </nav>
