@@ -35,6 +35,10 @@
               <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact us</a>
             </li>
           </ul>
+              {% if user.is_authenticated %}
+                <a class="btn">Hi, <strong class="text-uppercase"> {{ user.username }} </strong></a>
+                <a class="btn btn-outline-dark" href="{% url 'djangoapp:logout' %}">Logout</a>              
+              {% else %}
               <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
                   {% csrf_token %}
                   <div class="input-group">
@@ -44,6 +48,7 @@
                       <a class="btn btn-outline-dark" href="{% url 'djangoapp:registration' %}">Sign Up</a>
                   </div>
               </form>
+              {% endif %}
         </div>
       </div>
       </nav>
