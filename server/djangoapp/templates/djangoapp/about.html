@@ -4,9 +4,17 @@
 
 {% block content %}
     <div class="container">
-        <h1>
-            Welcome to Best Cars dealership, home to the best cars in North America. We sell domestic and imported cars at reasonable prices.
-        </h1>
-        <p>{{ about }} </p>
+        <div class="row">
+            <div class="col-8">
+                <h1>
+                    Welcome to Best Cars dealership, home to the best cars in North America. We sell domestic and imported cars at reasonable prices.
+                </h1>
+            </div>
+            <div class="col">
+                <p>{{ about }} </p>        
+            </div>
+    
+        </div>
+        
     </div>
 {% endblock  %}

@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 # def about(request):
 def about(request):
     context = {
-        'about' : 'This is about view'
+        'about' : 'More details about us comming from view'
     }
     if request.method == "GET":
         return render(request, 'djangoapp/about.html', context)
@@ -31,7 +31,7 @@ def about(request):
 #def contact(request):
 def contact(request):
     context = {
-        'contact' : 'This is contcat view is coming from view'
+        'contact' : 'Contact us'
     }
     if request.method == "GET":
         return render(request, 'djangoapp/contact.html', context)

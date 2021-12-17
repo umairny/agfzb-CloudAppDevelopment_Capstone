@@ -1,11 +1,11 @@
   applications:
   - name: bestcars
     routes:
-      - route: um-bestcar.apic.mybluemix.net
+      - route: um-bestcar.us-south.cf.appdomain.cloud
     memory: 128M
     buildpack: python_buildpack
   - name: bestcars-nginx
     routes:
-      - route: um-bestcar.apic.mybluemix.net/static
+      - route: um-bestcar.us-south.cf.appdomain.cloud/static
     memory: 128M
     buildpack: staticfile_buildpack
