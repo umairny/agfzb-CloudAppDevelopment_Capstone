@@ -1,18 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Dealership Review</title>
-    {% load static %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-</head>
+{% extends 'base_template.html' %}
+{% block title %}Detail reviews{% endblock %}
 
-    <body>
-
-    <!--Add a nav bar here -->
-
+{% block content %}
+<div class="container mt-2">
+    <div class="card bg-dark text-light">
+        <div class="card-body">
+          <h4 class="card-title">{{ detail.full_name}}</h4>
+          <p class="m-0">{{ detail.address }}, {{ detail.city }}, {{ detail.zip }}, {{ detail.st }}</p>
+        </div>
+    </div>
+    
     <!-- Add reviews as cards -->
-
-    </body>
-
-</html>
+    <div class="card m-3">
+        <div class="card-header">
+            Reviews:
+        </div>
+        <div class="card-body">
+            {% if reviews %}
+                {% for review in reviews %}
+                <div class="row">
+                    <div class="col-8">
+                         <p class="m-0 text-dark">{{ review.review }}</p>
+                         <small><em>from: {{ review.name }}</em> </small>
+                    </div>
+                    <div class="col-4">
+                        {% if review.purchase == True %}
+                            <p class="m-0"><small>Make and model:</small> <br /> {{ review.car_make }}, {{ review.car_model }}, {{ review.car_year }}
+                            <br /><span> <small>Purchase date: {{ review.purchase_date }} </small></span></p>
+                        {% else %}
+                                <p>Not purchased</p>
+                        {% endif %}
+        
+                    </div>
+                </div>
+                <hr />
+                {% endfor %}             
+            {% else %}
+                <P>No reviews yet for this dealership.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock  %}

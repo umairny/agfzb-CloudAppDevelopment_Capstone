@@ -6,7 +6,35 @@
 
 {% block content %}
     <div class="container">
-        Home page index
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Dealers Name</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>Zip</th>
+                    <th>State</th>
+                    <th>Short name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dealer in dealers %}
+                <tr>
+                    <td>{{ dealer.id }}</td>
+                    <td><a href="{% url "djangoapp:dealer_details" dealer.id %}">{{ dealer.full_name }}</a></td>
+                    <td>{{ dealer.address }}</td>
+                    <td>{{ dealer.city }}</td>
+                    <td>{{ dealer.zip }}</td>
+                    <td>{{ dealer.st }}</td>
+                    <td>{{ dealer.short_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+        
         {% if user.is_authenticated %}
             {{ user }}
             {% else %}
