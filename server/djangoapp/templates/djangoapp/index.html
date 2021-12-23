@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <table class="table">
+    <div class="container mt-2">
+        <table class="table" id="table" data-filter-control="true">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -14,8 +14,7 @@
                     <th>Address</th>
                     <th>City</th>
                     <th>Zip</th>
-                    <th>State</th>
-                    <th>Short name</th>
+                    <th class="p-2" data-field="state" data-filter-control="select">State</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,18 +26,14 @@
                     <td>{{ dealer.city }}</td>
                     <td>{{ dealer.zip }}</td>
                     <td>{{ dealer.st }}</td>
-                    <td>{{ dealer.short_name }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-
-
-        
-        {% if user.is_authenticated %}
-            {{ user }}
-            {% else %}
-            Not login
-        {% endif %}
     </div>
+    <script>
+        $(function() {
+          $('#table').bootstrapTable()
+        })
+      </script>
 {% endblock  %}

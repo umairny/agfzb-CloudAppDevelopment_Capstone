@@ -1,5 +1,5 @@
 {% extends 'base_template.html' %}
-{% block title %}Detail reviews{% endblock %}
+{% block title %}Dealer detail and reviews{% endblock %}
 
 {% block content %}
 <div class="container mt-2">
@@ -9,34 +9,47 @@
           <p class="m-0">{{ detail.address }}, {{ detail.city }}, {{ detail.zip }}, {{ detail.st }}</p>
         </div>
     </div>
-    
+    {% if user.is_authenticated %}
+        <a class="btn btn-primary m-2" href="{% url 'djangoapp:add_review' detail.id %}" role="button">Add your review</a>
+    {% else %}
+        <p class="alert alert-light m-2">login in to review.</p>
+    {% endif %}
+
     <!-- Add reviews as cards -->
-    <div class="card m-3">
-        <div class="card-header">
-            Reviews:
-        </div>
-        <div class="card-body">
-            {% if reviews %}
-                {% for review in reviews %}
+    <h4 class="alert alert-light">Reviews:</h4>
+        {% if reviews %}
+            {% for review in reviews %}
                 <div class="row">
                     <div class="col-8">
-                         <p class="m-0 text-dark">{{ review.review }}</p>
-                         <small><em>from: {{ review.name }}</em> </small>
+                        <div class="card border-light mb-3">
+                            <div class="card-body">
+                                <img style="width:50px;" class="float-left mr-4"
+                                {% if  review.sentiment == "neutral" %}
+                                    src="{{MEDIA_URL}}/emoji/neutral.png" alt="neutral"
+                                {% elif review.sentiment == "positive" %}
+                                    src="{{MEDIA_URL}}/emoji/positive.png" alt="positive"
+                                {% elif review.sentiment == "negative" %}
+                                    src="{{MEDIA_URL}}/emoji/negative.png" alt="negative"
+                                {% endif %}
+                                >
+                                <h4 class="card-title">{{ review.review }}</h4>
+                                <p class="card-text"><em> from: {{ review.name }}</em></p>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-4">
                         {% if review.purchase == True %}
-                            <p class="m-0"><small>Make and model:</small> <br /> {{ review.car_make }}, {{ review.car_model }}, {{ review.car_year }}
-                            <br /><span> <small>Purchase date: {{ review.purchase_date }} </small></span></p>
+                            <h4 class="alert alert-success m-0"><strong> {{ review.car_make }} >>> {{ review.car_model }} >>> {{ review.car_year }} </strong>
+                            <br /><span> <small>Purchase date: {{ review.purchase_date }} </small></span></h4>
                         {% else %}
-                                <p>Not purchased</p>
+                                <h5 class="alert alert-warning">Car not purchased from this dealership</h5>
                         {% endif %}
-        
                     </div>
                 </div>
                 <hr />
                 {% endfor %}             
             {% else %}
-                <P>No reviews yet for this dealership.</p>
+                <h4 class="alret alert-dark">No reviews yet for this dealership.</h4>
             {% endif %}
         </div>
     </div>

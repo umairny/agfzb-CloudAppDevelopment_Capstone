@@ -53,12 +53,18 @@
       </div>
       </nav>
     <!--Add a dealer table here -->
+      {% if message %}
+        <div class="alert alert-warning text-center" role="alert">
+          <strong>{{ message }}</strong>
+        </div>
+      {% endif %}
+
     {% block content %}
 
     {% endblock %}
 
     <!-- Footer -->
-    <footer class="bg-light pt-1">
+    <footer class="bg-light pt-1 fixed-bottom">
       <div class="container">
         <ul class="nav justify-content-center">
           <li class="nav-item">

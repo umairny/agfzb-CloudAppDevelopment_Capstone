@@ -1,5 +1,9 @@
+from django.http import response
 import requests
 import json
+from ibm_watson import NaturalLanguageUnderstandingV1
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+from ibm_watson.natural_language_understanding_v1 import Features, SentimentOptions
 from .models import CarDealer, DealerReview
 from requests.auth import HTTPBasicAuth
 
@@ -24,7 +28,16 @@ def get_request(url, **kwargs):
 
 # Create a `post_request` to make HTTP POST requests
 # e.g., response = requests.post(url, params=kwargs, json=payload)
-
+def post_request(url, json_payload, **kwargs):
+    print("POST to {} ".format(url))
+    print(json_payload)
+    try:
+        response = requests.post(url, json_payload, headers={'Content-Type': 'application/json'})
+    except Exception as e:
+        print("Error", e)
+    print("Status Code ", {response.status_code})
+    data = json.loads(response.text)
+    return data
 
 # Create a get_dealers_from_cf method to get dealers from a cloud function
 def get_dealers_from_cf(url, **kwargs):
@@ -87,13 +100,11 @@ def get_dealer_reviews_from_cf(url, dealerId):
                     car_model="",
                     car_year="",
                 )
-
             review_obj.sentiment = analyze_review_sentiments(review_obj.review)
             results.append(review_obj)
 
     return results
 
-# - Call get_request() with specified arguments
 # - Parse JSON results into a DealerView object list
 def get_dealer_details_from_cf(url, dealerId):
     results = []
@@ -116,18 +127,24 @@ def get_dealer_details_from_cf(url, dealerId):
 # Create an `analyze_review_sentiments` method to call Watson NLU and analyze text
 def analyze_review_sentiments(dealerreview, **kwargs):
     url = "https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/b1af1968-d264-4af9-b645-3f0891234662"
-    api_key = "K5-D9s1wjZmytr15xE68N6ayquK-3_P4yIOBL8dBIrbc"
-    params = json.dumps({"text": dealerreview, "features": {"sentiment": {}}})
+    apikey = "IcaeHW0dXk0Uo7qz228yG9csheCPu3QiAcCoSlvbZoX1"
+
+    authenticator = IAMAuthenticator(apikey)
+    natural_language_understanding = NaturalLanguageUnderstandingV1(
+        version='2021-08-01',
+        authenticator=authenticator
+    )
+    natural_language_understanding.set_service_url(url)
+
+    response = natural_language_understanding.analyze(
+        text=dealerreview,
+        features=Features(sentiment=SentimentOptions())).get_result()
     
-    response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
-                                        auth=HTTPBasicAuth('apikey', api_key))
-    try:
-        sentiment = response.json()["sentiment"]["document"]["label"]
-        return sentiment
-    except:
-        return "neutral"
-# - Call get_request() with specified arguments
-# - Get the returned sentiment label such as Positive or Negative
+    # - Get the returned sentiment label such as Positive or Negative
+    #print(json.dumps(response, indent=2))
+    print("setiment of review: ", response["sentiment"]["document"]["label"])
+    sentiment = response["sentiment"]["document"]["label"]
+    return sentiment
 
 
 

@@ -1,16 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    {% load static %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
+{% extends 'base_template.html' %}
+{% block tilte %} Add Reviews {% endblock  %}
 
-</head>
-    <body>
-    <!--Add review form here -->
-    </body>
-</html>
+{% block content %}
+<div class="container">
+    {% if user.is_authenticated %}
+    <h4>Add a review about <strong> {{ detail.full_name }}.</strong> </h4>
+    <form action="{% url 'djangoapp:add_review' detail.id %}" method="post">
+        {% csrf_token %}
+        <div class="form-group mt-2" >
+            <textarea class="form-control" id="content" name="content" rows="2" placeholder="Write you review" required></textarea>
+
+            <label for="purchasecheck"><b>Purchased from this dealership.</b></label>
+            <input class="ml-2 form-check-input" type="checkbox" name="purchasecheck" id="purchasecheck">
+            <br>
+            <div id="carmake" style="display:none;">
+                <span style="font-size:large;">Car make - model - year: </span>
+                    <select name="car" id="car" class="form-select m-2" required>
+                        {% for car in cars %}
+                            <option selected value={{car.id}}>{{ car.make_model.make }}-{{car.name}}-{{ car.year|date:"Y" }}</option>
+                        {% endfor %}
+                    </select>
+                <br>
+                    <p class="float-left m-2">Purchase date: </p>
+                <input class="date-own form-control w-25" type="date" name="purchasedate" id="purchasedate">
+            </div>
+            <hr>
+            <button type="submit" class="btn btn-primary m-2">Submit review</button>
+        </div>
+    </form>
+    {% else %}
+        <div style="x-large">
+            Please login to review.
+        </div>
+    {% endif %}
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('#purchasecheck').change(function () {                
+           $('#carmake').toggle(this.checked);
+        }).change(); //ensure visible state matches initially
+      });
+</script>
+{% endblock  %}
