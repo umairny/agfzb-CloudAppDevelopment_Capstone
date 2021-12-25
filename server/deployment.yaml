@@ -20,7 +20,7 @@ spec:
         run: dealership
     spec:
       containers:
-      - image: us.icr.io/um-dealership/dealership:latest
+      - image: us.icr.io/$MY_NAMESPACE/dealership:latest
         imagePullPolicy: Always
         name: dealership
         ports:
