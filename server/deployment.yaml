@@ -19,6 +19,8 @@ spec:
       labels:
         run: dealership
     spec:
+      imagePullSecrets:
+      - name: icr 
       containers:
       - image: us.icr.io/$MY_NAMESPACE/dealership:latest
         imagePullPolicy: Always
